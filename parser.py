@@ -181,13 +181,20 @@ class Subroutine:
         )
 
 
-@dataclass
 class CF2:
-    parameters: dict
-    dimensions: tuple[tuple[int, int], tuple[int, int]]
-    scale: tuple[int, int]
-    routine: list[Line, Arc, Text, SubroutineCall]
-    subroutines: dict[str, Subroutine]
+    def __init__(
+        self,
+        dimensions: tuple[tuple[int, int], tuple[int, int]],
+        parameters: dict | None = None,
+        scale: tuple[int, int] = (1, 1),
+        routine: list[Line, Arc, Text, SubroutineCall] | None = None,
+        subroutines: list[Subroutine] | None = None,
+    ):
+        self.dimensions = dimensions
+        self.parameters = parameters if parameters else {}
+        self.scale = scale
+        self.routine = routine if routine else []
+        self.subroutines = subroutines if subroutines else []
 
     def __repr__(self):
         return "\n".join(
@@ -223,7 +230,7 @@ class CF2:
         )
         self.scale = self.scale  # TODO: Fix this
         self.routine += additional_cf2.routine
-        self.subroutines = self.subroutines + additional_cf2.subroutines
+        self.subroutines += additional_cf2.subroutines
 
     def add_line(
         self,
@@ -418,4 +425,4 @@ def parse_cf2(path: Path) -> CF2:
     parameters, unit, dimensions, scale, routine, subroutines = get_sections(
         lines)
     assert unit == "UM"
-    return CF2(parameters, dimensions, scale, routine, subroutines)
+    return CF2(dimensions, parameters, scale, routine, subroutines)

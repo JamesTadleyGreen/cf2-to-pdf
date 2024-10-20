@@ -176,14 +176,15 @@ class Subroutine:
 
     def __repr__(self):
         return "\n".join(
-            [f"SUB,{self.name}"] + [i.__repr__() for i in self.instructions] + ["END"]
+            [f"SUB,{self.name}"] + [i.__repr__()
+                                    for i in self.instructions] + ["END"]
         )
 
 
 @dataclass
 class CF2:
     parameters: dict
-    dimensions: tuple[int, int]
+    dimensions: tuple[tuple[int, int], tuple[int, int]]
     scale: tuple[int, int]
     routine: list[Line, Arc, Text, SubroutineCall]
     subroutines: dict[str, Subroutine]
@@ -233,7 +234,8 @@ class CF2:
         nbridges: int,
         wbridges: int,
     ):
-        self.routine.append(Line(pointage, linetype, start, end, nbridges, wbridges))
+        self.routine.append(
+            Line(pointage, linetype, start, end, nbridges, wbridges))
 
     def add_arc(
         self,
@@ -247,7 +249,8 @@ class CF2:
         wbridges: int,
     ):
         self.routine.append(
-            Arc(pointage, linetype, start, end, centre, direction, nbridges, wbridges)
+            Arc(pointage, linetype, start, end,
+                centre, direction, nbridges, wbridges)
         )
 
     def add_text(
@@ -260,7 +263,8 @@ class CF2:
         width: int,
         text: str,
     ):
-        self.routine.append(Text(pointage, linetype, start, angle, height, width, text))
+        self.routine.append(Text(pointage, linetype, start,
+                            angle, height, width, text))
 
     def add_subroutine(*args, **kwargs):
         raise NotImplementedError
@@ -281,7 +285,7 @@ def get_between(xs: list[str], start: str, end: str) -> list[str]:
             start_index = i
         if line.startswith(end) and end_index == -1:
             end_index = i
-    return xs[start_index + 1 : end_index]
+    return xs[start_index + 1: end_index]
 
 
 def parse_parameters(parameters: list[str]) -> dict:
@@ -401,7 +405,8 @@ def get_sections(
     scale = parse_scale(main.pop(0))
     routine_divider = main.index("END")
     routine = parse_subroutine(main[:routine_divider])
-    subroutines = parse_subroutines(main[routine_divider + 1 :])  # For END and $EOF
+    subroutines = parse_subroutines(
+        main[routine_divider + 1:])  # For END and $EOF
     return parameters, unit, dimensions, scale, routine, subroutines
 
 
@@ -410,6 +415,7 @@ def parse_cf2(path: Path) -> CF2:
         lines = f.read().splitlines()
     assert lines.pop(0) == "$BOF"
     assert lines.pop(0) == "V2"
-    parameters, unit, dimensions, scale, routine, subroutines = get_sections(lines)
+    parameters, unit, dimensions, scale, routine, subroutines = get_sections(
+        lines)
     assert unit == "UM"
     return CF2(parameters, dimensions, scale, routine, subroutines)

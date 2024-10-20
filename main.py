@@ -1,8 +1,8 @@
 from os import path
 import os
 
-from cf2 import parse_cf2, CF2, LineType
-from pdf import create_pdf
+from cf2.parser import parse_cf2, LineType
+from cf2.pdf import create_pdf
 
 
 def create_pdf_from_cf2(cf2_file: path, pdf_file: path, verbose: bool = False) -> None:

@@ -3,7 +3,7 @@ import math
 import numpy as np
 from os import path
 
-from cf2 import Line, Arc, Text, CF2, LineType
+from cf2.parser import Line, Arc, Text, CF2, LineType
 
 LINE_TYPES = {
     LineType.CUT: {"width": 1, "rgb": (1, 0, 1), "dash": None},
@@ -66,7 +66,8 @@ def create_pdf(output: path, cf2: CF2) -> None:
     context = cairo.Context(surface)
     # Flipping y-axis due to cairo oddities
     context.set_matrix(cairo.Matrix(1, 0, 0, -1))
-    context.translate(-cf2.dimensions[0][0], -dimensions[1] - cf2.dimensions[0][1])
+    context.translate(-cf2.dimensions[0][0], -
+                      dimensions[1] - cf2.dimensions[0][1])
     context.set_line_width(5)
     context.set_source_rgb(0, 0, 1)
     instructions = cf2.flatten()

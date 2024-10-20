@@ -91,26 +91,10 @@ class Arc:
     def __repr__(self):
         return f"A,{self.pointage},{self.linetype.value},0,{self.start[0]},{self.start[1]},{self.end[0]},{self.end[1]},{self.centre[0]},{self.centre[1]},{self.direction},{self.nbridges},{self.wbridges}"
 
-    def add_polar(self):
-        self.radius = self.calculate_radius(self.centre, self.start)
-        self.start_angle = math.pi + self.calculate_angle(
-            self.centre, self.start if self.direction == 1 else self.end
-        )
-        self.end_angle = math.pi + self.calculate_angle(
-            self.centre, self.end if self.direction == 1 else self.start
-        )
-
-    def calculate_radius(self, centre, point):
-        return math.sqrt((centre[0] - point[0]) ** 2 + (centre[1] - point[1]) ** 2)
-
-    def calculate_angle(self, centre, point):
-        return math.atan2(centre[1] - point[1], centre[0] - point[0])
-
     def adjust(self, routine: SubroutineCall):
         self.translate(*routine.position)
         self.scale(*routine.scale)
         self.rotate(routine.angle, routine.position)
-        self.add_polar()
         return self
 
     def translate(self, dx, dy):

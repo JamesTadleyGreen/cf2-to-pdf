@@ -30,13 +30,31 @@ def add_line(context: cairo.Context, line: Line) -> None:
     context.stroke()
 
 
+def calculate_radius(centre, point):
+    return math.sqrt((centre[0] - point[0]) ** 2 + (centre[1] - point[1]) ** 2)
+
+
+def calculate_angle(centre, point):
+    return math.atan2(centre[1] - point[1], centre[0] - point[0])
+
+
+def convert_to_polar(arc: Arc) -> tuple[float, float, float]:
+    radius = calculate_radius(arc.centre, arc.start)
+    start_angle = math.pi + calculate_angle(
+        arc.centre, arc.start if arc.direction == 1 else arc.end)
+    end_angle = math.pi + calculate_angle(
+        arc.centre, arc.end if arc.direction == 1 else arc.start)
+    return start_angle, end_angle, radius
+
+
 def add_arc(context: cairo.Context, arc: Arc) -> None:
     set_line_style(context, arc.linetype)
     context.set_line_width(arc.pointage)
-    if arc.start_angle == arc.end_angle:
+    start_angle, end_angle, radius = convert_to_polar(arc)
+    if start_angle == end_angle:
         arc.start_angle = 0
         arc.end_angle = 2 * math.pi
-    context.arc(*arc.centre, arc.radius, arc.start_angle, arc.end_angle)
+    context.arc(*arc.centre, radius, start_angle, end_angle)
     context.stroke()
 
 

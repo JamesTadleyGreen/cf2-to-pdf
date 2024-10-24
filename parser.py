@@ -194,7 +194,7 @@ class CF2:
             + ["$EOF"]
         )
 
-    def flatten(self) -> list[Subroutine]:
+    def flatten(self) -> list[Line, Arc, Text]:
         output = []
         for subroutine in self.routine:
             if isinstance(subroutine, SubroutineCall):

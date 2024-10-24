@@ -6,11 +6,11 @@ from os import path
 from cf2.parser import Line, Arc, Text, CF2, LineType
 
 LINE_TYPES = {
-    LineType.CUT: {"width": 1, "rgb": (1, 0, 1), "dash": None},
-    LineType.CREASE: {"width": 1, "rgb": (0, 1, 1), "dash": [10, 5]},
-    LineType.PERF: {"width": 1, "rgb": (0, 0.75, 0), "dash": [2, 2]},
-    LineType.SCORE: {"width": 1, "rgb": (0.75, 0.75, 0), "dash": [2, 2]},
-    LineType.UNKNOWN: {"width": 1, "rgb": (1, 0, 0), "dash": None},
+    LineType.CUT: {"rgb": (1, 0, 1), "dash": None},
+    LineType.CREASE: {"rgb": (0, 1, 1), "dash": [10, 5]},
+    LineType.PERF: {"rgb": (0, 0.75, 0), "dash": [2, 2]},
+    LineType.SCORE: {"rgb": (0.75, 0.75, 0), "dash": [2, 2]},
+    LineType.UNKNOWN: {"rgb": (1, 0, 0), "dash": None},
 }
 
 

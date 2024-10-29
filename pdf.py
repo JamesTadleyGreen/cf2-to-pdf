@@ -41,13 +41,14 @@ def calculate_angle(centre, point):
 
 
 def convert_to_polar(arc: Arc) -> tuple[float, float, float]:
-    radius = calculate_radius(arc.centre, arc.start)
+    centre = (arc.centre[0] * POINTS_TO_MM, arc.centre[1] * POINTS_TO_MM)
+    start = (arc.start[0] * POINTS_TO_MM, arc.start[1] * POINTS_TO_MM)
+    end = (arc.end[0] * POINTS_TO_MM, arc.end[1] * POINTS_TO_MM)
+    radius = calculate_radius(centre, start)
     start_angle = math.pi + calculate_angle(
-        arc.centre, arc.start if arc.direction == 1 else arc.end
+        centre, start if arc.direction == 1 else end
     )
-    end_angle = math.pi + calculate_angle(
-        arc.centre, arc.end if arc.direction == 1 else arc.start
-    )
+    end_angle = math.pi + calculate_angle(centre, end if arc.direction == 1 else start)
     return start_angle, end_angle, radius
 
 
@@ -58,7 +59,13 @@ def add_arc(context: cairo.Context, arc: Arc) -> None:
     if start_angle == end_angle:
         arc.start_angle = 0
         arc.end_angle = 2 * math.pi
-    context.arc(*arc.centre * POINTS_TO_MM, radius, start_angle, end_angle)
+    context.arc(
+        arc.centre[0] * POINTS_TO_MM,
+        arc.centre[1] * POINTS_TO_MM,
+        radius,
+        start_angle,
+        end_angle,
+    )
     context.stroke()
 
 
